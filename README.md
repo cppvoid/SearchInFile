@@ -1,6 +1,6 @@
 SearchInFile
 ============
-For Windows, Linux and MacOS.
+-> Windows, Linux and MacOS <-
 
 Command line tool for searching a term in files. 
 
