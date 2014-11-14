@@ -13,9 +13,23 @@ void searchInFiles( const std::string& searchTerm, const std::vector< std::strin
 
         std::string buffer;
         int line(1);
+        const boost::regex dataRegex( searchTerm );
+
         while( std::getline( file, buffer ) )
         {
-            if( buffer.find( searchTerm ) != std::string::npos )
+            if( searchOptions & options::regexMatch )
+            {
+                if( boost::regex_search(buffer, dataRegex ) )
+                {
+                    std::cout << "file: " << filePath << " -> line: " << line << "\n";
+                    if( searchOptions & options::showText )
+                    {
+                        std::cout << buffer << "\n";
+                    }
+                }
+            }
+
+            else if( buffer.find( searchTerm ) != std::string::npos )
             {
                 std::cout << "file: " << filePath << " -> line: " << line << "\n";
                 if( searchOptions & options::showText )

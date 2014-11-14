@@ -6,7 +6,9 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <boost/regex.hpp>
 #include <boost/filesystem.hpp>
+
 
 void searchInFiles( const std::string& searchTerm, const std::vector< std::string>& filesPaths, int searchOptions = 0 );
 

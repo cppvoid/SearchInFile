@@ -34,8 +34,9 @@ void parseArguments( int argc, char** argv )
     ( "search, s", boost::program_options::value< std::vector<std::string >>()->multitoken(), "search term" )
     ( "files, f", boost::program_options::value< std::vector<std::string >>()->multitoken(), "files to search")
     ( "directories, d", boost::program_options::value< std::vector<std::string >>()->multitoken(), "directories to search")
-    ( "recursive,r", "recursive directory search")
-    ( "text, t", "show text line at found");
+    ( "recursive", "search in directories recursively")
+    ( "text, t", "show text line at found")
+    ( "regex", "search for regex match");
 
     boost::program_options::variables_map vm;
     boost::program_options::store( boost::program_options::command_line_parser( argc, argv )
@@ -95,32 +96,32 @@ void parseArguments( int argc, char** argv )
         return;
     }
 
+    int fileSearchOptions(0);
+    int directorySearchOptions(0);
+
+    if( vm.count( "regex" ) )
+    {
+        fileSearchOptions = options::regexMatch;
+    }
+
+    if( vm.count( "text" ) )
+    {
+        fileSearchOptions |= options::showText;
+    }
+
+    if( vm.count( "recursive" ) )
+    {
+        directorySearchOptions = options::recursive;
+    }
+
     if( !files.empty() )
     {
-        if( vm.count("text") )
-        {
-            searchInFiles( searchTerm, files, options::showText );
-        }
-        else
-        {
-            searchInFiles( searchTerm, files );
-        }
+        searchInFiles( searchTerm, files, fileSearchOptions );
     }
 
     if( !directorys.empty() )
     {
-        if( vm.count( "recursive" ) && vm.count( "text" ) )
-        {
-            searchInDirectories( searchTerm, directorys, options::recursive, options::showText );
-        }
-        else if( vm.count( "recursive" ) )
-        {
-            searchInDirectories( searchTerm, directorys, options::recursive );
-        }
-        else
-        {
-            searchInDirectories( searchTerm, directorys );
-        }
+        searchInDirectories( searchTerm, directorys, directorySearchOptions, fileSearchOptions );
     }
 }
 

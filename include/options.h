@@ -6,7 +6,8 @@ namespace options
 
 enum fileSearchOptions
 {
-    showText = 0x01
+    showText    = 0x01,
+    regexMatch  = 0x02
 };
 
 enum directorySearchOptions
